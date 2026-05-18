@@ -11,13 +11,20 @@ import {
 export const DepartmentChart = ({ data }) => {
   const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#06b6d4', '#f97316'];
 
+  // Transform data to include name field for labeling
+  const transformedData = data.map(item => ({
+    ...item,
+    name: item._id || 'Unknown',
+    value: item.count
+  }));
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">
       <h3 className="text-lg font-bold mb-4">Distribution by Department</h3>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
-            data={data}
+            data={transformedData}
             cx="50%"
             cy="50%"
             labelLine={false}
@@ -26,7 +33,7 @@ export const DepartmentChart = ({ data }) => {
             fill="#8884d8"
             dataKey="count"
           >
-            {data.map((entry, index) => (
+            {transformedData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
