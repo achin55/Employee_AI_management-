@@ -5,15 +5,42 @@ import { validateEmployee, validateRequest } from '../middleware/validateMiddlew
 
 const router = express.Router();
 
+// ==============================
+// PUBLIC ROUTES (No Authentication Required)
+// ==============================
+
+// Get all employees
+router.get('/', employeeController.getAllEmployees);
+
+// Get employee by ID
+router.get('/:id', employeeController.getEmployeeById);
+
+// Get top performers
+router.get('/top-performers', employeeController.getTopPerformers);
+
+// Search employees
+router.get('/search', employeeController.searchEmployees);
+
+// Get employees by department
+router.get('/department/:department', employeeController.getEmployeesByDepartment);
+
+// Get employees by skill
+router.get('/skill/:skill', employeeController.getEmployeesBySkill);
+
+// ==============================
+// PROTECTED ROUTES (Require JWT Authentication)
+// ==============================
+
+// Create employee
 router.post('/', authMiddleware, validateEmployee, validateRequest, employeeController.createEmployee);
-router.get('/', authMiddleware, employeeController.getAllEmployees);
-router.get('/top-performers', authMiddleware, employeeController.getTopPerformers);
-router.get('/search', authMiddleware, employeeController.searchEmployees);
+
+// Filter employees
 router.post('/filter', authMiddleware, employeeController.filterEmployees);
-router.get('/department/:department', authMiddleware, employeeController.getEmployeesByDepartment);
-router.get('/skill/:skill', authMiddleware, employeeController.getEmployeesBySkill);
-router.get('/:id', authMiddleware, employeeController.getEmployeeById);
+
+// Update employee
 router.put('/:id', authMiddleware, employeeController.updateEmployee);
+
+// Delete employee
 router.delete('/:id', authMiddleware, employeeController.deleteEmployee);
 
 export default router;
